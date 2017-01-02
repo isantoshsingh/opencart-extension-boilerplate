@@ -15,14 +15,17 @@ class ModelExtensionShippingCustom extends Model {
             $status = false;
         }
 
-        if ($this->cart->getSubTotal() > $this->config->get('custom_total')) {
+        if ($this->cart->getSubTotal() < $this->config->get('custom_total')) {
             $cost = $this->config->get('custom_cost');
             $tax_class_id = $this->config->get('custom_tax_class_id');
             $text = $this->currency->format($this->tax->calculate($this->config->get('custom_cost'), $this->config->get('custom_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency']);
+            $description = $this->language->get('text_flat_description');
         } else {
+            #free shipping
             $cost = 0.00;
             $tax_class_id = 0;
             $text = $this->currency->format(0.00, $this->session->data['currency']);
+            $description = $this->language->get('text_free_description');
         }
 
         $method_data = array();
@@ -32,7 +35,7 @@ class ModelExtensionShippingCustom extends Model {
 
             $quote_data['custom'] = array(
                 'code' => 'custom.custom',
-                'title' => $this->language->get('text_description'),
+                'title' => $description,
                 'cost' => $cost,
                 'tax_class_id' => $tax_class_id,
                 'text' => $text

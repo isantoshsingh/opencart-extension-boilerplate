@@ -31,7 +31,7 @@ class ControllerExtensionShippingCustom extends Controller {
         $data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
         $data['entry_status'] = $this->language->get('entry_status');
         $data['entry_sort_order'] = $this->language->get('entry_sort_order');
-
+        $data['entry_tax_class'] = $this->language->get('entry_tax_class');
         $data['help_total'] = $this->language->get('help_total');
 
         $data['button_save'] = $this->language->get('button_save');
@@ -69,12 +69,15 @@ class ControllerExtensionShippingCustom extends Controller {
         } else {
             $data['custom_cost'] = $this->config->get('custom_cost');
         }
-        
+
         if (isset($this->request->post['custom_tax_class_id'])) {
             $data['custom_tax_class_id'] = $this->request->post['custom_tax_class_id'];
         } else {
             $data['custom_tax_class_id'] = $this->config->get('custom_tax_class_id');
         }
+        $this->load->model('localisation/tax_class');
+
+        $data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
         if (isset($this->request->post['custom_total'])) {
             $data['custom_total'] = $this->request->post['custom_total'];
